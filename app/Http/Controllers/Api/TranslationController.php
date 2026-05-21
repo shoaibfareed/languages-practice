@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Services\TranslationService;
 use App\Http\Resources\TranslationResource;
 use App\Http\Resources\TranslationCollection;
+use Illuminate\Http\Request;
 
 class TranslationController extends Controller
 {
@@ -23,6 +24,13 @@ class TranslationController extends Controller
     {
        return new TranslationCollection(
             Translation::with('tags')->paginate(20)
+        );
+    }
+
+    public function show(Translation $translation)
+    {
+        return new TranslationResource(
+            $translation->load('tags')
         );
     }
 
