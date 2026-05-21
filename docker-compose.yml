@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: translation_app
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+      - redis
+    networks:
+      - translation_net
+
+  db:
+    image: mysql:8
+    container_name: translation_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: translation_service
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - translation_net
+
+  redis:
+    image: redis:alpine
+    container_name: translation_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - translation_net
+
+  app_server:
+    image: php:8.4-cli
+    container_name: translation_server
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - translation_net
+
+volumes:
+  db_data:
+
+networks:
+  translation_net:
