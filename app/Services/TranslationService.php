@@ -70,9 +70,7 @@ class TranslationService
             function () use ($locale) {
 
                 return Translation::where('locale', $locale)
-                    ->select('key', 'content')
                     ->orderBy('key')
-                    ->get()
                     ->pluck('content', 'key')
                     ->toArray();
             }
