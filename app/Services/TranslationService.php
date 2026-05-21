@@ -73,7 +73,8 @@ class TranslationService
                     ->select('key', 'content')
                     ->orderBy('key')
                     ->get()
-                    ->pluck('content', 'key');
+                    ->pluck('content', 'key')
+                    ->toArray();
             }
         );
     }
