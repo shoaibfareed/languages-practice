@@ -159,5 +159,11 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
+In env file, set up database and Redis configurations.
+CACHE_STORE=redis
+REDIS_PORT= your_redis_port
+REDIS_CLIENT=predis
+REDIS_HOST=your_redis_host
+
 php artisan migrate --seed
 php artisan serve
