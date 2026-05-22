@@ -62,18 +62,16 @@ class TranslationService
         Cache::tags(['translations'])->flush();
     }
 
-    public function export(string $locale)
+    public function export(string $locale): array
     {
         return Cache::tags(['translations'])->remember(
-            "v1:{$locale}",
-            3600,
-            function () use ($locale) {
-
-                return Translation::where('locale', $locale)
-                    ->orderBy('key')
-                    ->pluck('content', 'key')
-                    ->toArray();
-            }
+            "translations:{$locale}",
+            now()->addHour(),
+            fn () => Translation::query()
+                ->where('locale', $locale)
+                ->orderBy('key')
+                ->pluck('content', 'key')
+                ->all()
         );
     }
 }

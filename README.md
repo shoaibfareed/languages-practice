@@ -83,7 +83,7 @@ Authorization: Bearer {token}
 ---
 
 ### Search API
-``` GET /api/translations/search?key=home&locale=en&tag=web ```
+``` GET /api/translations/search?key=home&locale=en&tags=web ```
 
 
 ---
