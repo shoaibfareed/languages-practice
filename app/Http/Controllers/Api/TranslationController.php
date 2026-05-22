@@ -87,7 +87,7 @@ class TranslationController extends Controller
 
     public function export(Request $request)
     {
-        $locale = $request->input()('locale', 'en');
+        $locale = $request->input('locale', 'en');
 
         return response()->json(
             $this->service->export($locale)
