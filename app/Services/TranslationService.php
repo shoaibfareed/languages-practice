@@ -67,11 +67,22 @@ class TranslationService
         return Cache::tags(['translations'])->remember(
             "translations:{$locale}",
             now()->addHour(),
-            fn () => Translation::query()
-                ->where('locale', $locale)
-                ->orderBy('key')
-                ->pluck('content', 'key')
-                ->all()
+            function () use ($locale) {
+
+                $data = [];
+
+                Translation::query()
+                    ->select(['key', 'content'])
+                    ->where('locale', $locale)
+                    ->orderBy('key')
+                    ->chunk(1000, function ($rows) use (&$data) {
+                        foreach ($rows as $row) {
+                            $data[$row->key] = $row->content;
+                        }
+                    });
+
+                return $data;
+            }
         );
     }
 }
